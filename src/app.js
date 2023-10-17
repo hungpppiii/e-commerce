@@ -16,7 +16,9 @@ app.use(express.urlencoded({ extended: false })); // parse application/x-www-for
 app.use(express.json()); // parse application/json
 
 // init db
-
+import './dbs/init.mongodb.js'
+import { checkOverload } from './helpers/check.connect.js';
+checkOverload();
 // init routes
 
 // errors handler
