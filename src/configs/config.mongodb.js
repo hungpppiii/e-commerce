@@ -1,4 +1,6 @@
-import env from "../utils/validateEnv.js"
+"use strict"
+
+import env from "../utils/validateEnv"
 
 const dev = {
     db: {
