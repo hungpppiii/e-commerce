@@ -1,16 +1,14 @@
 "use strict";
 
 import mongoose from "mongoose";
-import env from "../utils/validateEnv.js";
-import { countConnect } from "../helpers/check.connect.js";
-import dbConfig from "../configs/config.mongodb.js";
+import env from "../utils/validateEnv";
+import { countConnect } from "../helpers/check.connect";
+import dbConfig from "../configs/config.mongodb";
 
 const {
   db: { host, port, name },
 } = dbConfig;
 const mongodbURI = `mongodb://${host}:${port}/${name}`;
-
-console.log(mongodbURI);
 
 class Database {
   constructor() {
@@ -29,7 +27,7 @@ class Database {
         countConnect();
         console.log("Connected mongodb success!");
       })
-      .catch((err) => console.log("Error connect mongodb!"));
+      .catch((err) => console.log("Error connect mongodb!\n", err));
   }
 
   static getInstance() {
