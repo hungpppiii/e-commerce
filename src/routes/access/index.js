@@ -1,5 +1,6 @@
 import express from "express";
 import accessController from "../../controllers/access.controller";
+import { authentication } from "../../middlewares/checkAuth";
 
 const router = express.Router();
 
@@ -32,5 +33,10 @@ const router = express.Router();
  *        description: Returns a metadata contains tokens.
  */
 router.post("/shop/signup", accessController.signUp);
+router.post("/shop/signin", accessController.signIn);
+
+// authentication
+router.use(authentication);
+router.post('/shop/logout', accessController.logout);
 
 export default router;
