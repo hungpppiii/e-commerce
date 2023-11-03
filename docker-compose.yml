@@ -1,0 +1,19 @@
+version: '3'
+services:
+  app:
+    build: .
+    environment:
+      PORT: 3030
+      NODE_ENV: production
+      DEV_DB_HOST: mongodb
+      DEV_DB_PORT: 27017
+      DEV_DB_NAME: ECommerce
+    ports:
+      - '3030:3030'
+    links:
+      - mongodb
+
+  mongodb:
+    image: mongo:latest
+    ports:
+      - '27017:27017'
