@@ -10,4 +10,6 @@ WORKDIR /app
 
 RUN yarn
 
+EXPOSE 3030
+
 CMD [ "yarn", "start" ]
