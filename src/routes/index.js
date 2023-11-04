@@ -1,18 +1,18 @@
 "use strict";
 
 import express from "express";
-import authRouter from "./access";
+import accessRouter from "./access";
 import { apiKey, permission } from "../middlewares/checkAuth";
 import { Permissions } from "../utils/constantType";
 
 const router = express.Router();
 
 // check ApiKey
-router.use(apiKey);
+// router.use(apiKey);
 // check Permission
-router.use(permission(Permissions.ALL));
+// router.use(permission(Permissions.ALL));
 
-router.use(authRouter);
+router.use(accessRouter);
 
 /**
  * @openapi
