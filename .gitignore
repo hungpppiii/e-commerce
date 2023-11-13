@@ -1,3 +1,4 @@
 node_modules/
 test-api/
+keys/*.pem
 .env

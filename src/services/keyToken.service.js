@@ -2,17 +2,11 @@ import KeyTokenModel from "../models/keytoken.model";
 import { Types } from "mongoose";
 
 class KeyTokenService {
-  static upsertKeyToken = async ({
-    userId,
-    publicKey,
-    privateKey,
-    refreshToken = [],
-  }) => {
+  static upsertKeyToken = async ({ userId, publicKey, refreshToken = [] }) => {
     const publicKeyString = publicKey ? publicKey.toString() : publicKey;
-    const privateKeyString = privateKey ? privateKey.toString() : privateKey;
 
     const filter = { userId };
-    const update = { userId, publicKey: publicKeyString, privateKey: privateKeyString, refreshToken };
+    const update = { userId, publicKey: publicKeyString, refreshToken };
     const options = { upsert: true, new: true };
     const tokens = await KeyTokenModel.findOneAndUpdate(
       filter,
@@ -23,7 +17,6 @@ class KeyTokenService {
     return tokens
       ? {
           publicKeyString: tokens.publicKey,
-          privateKeyString: tokens.privateKey,
         }
       : null;
   };
