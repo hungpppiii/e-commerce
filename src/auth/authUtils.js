@@ -1,7 +1,14 @@
 "use strict";
 
 import jwt from "jsonwebtoken";
-import crypto from "crypto";
+import fs from "fs";
+import { dirname, resolve, join } from "path";
+import { fileURLToPath } from "url";
+
+const __dirname = resolve(dirname(fileURLToPath(import.meta.url)));
+const keysDirectory = resolve(__dirname, "..", "..", "keys");
+const privateKeyFilePath = resolve(keysDirectory, "private_key.pem");
+const publicKeyFilePath = resolve(keysDirectory, "public_key.pem");
 
 const createTokenPair = async (payload, publicKey, privateKey) => {
   // accessToken
@@ -10,6 +17,7 @@ const createTokenPair = async (payload, publicKey, privateKey) => {
     expiresIn: "1 days",
   });
 
+  // refreshToken
   const refreshToken = await jwt.sign(payload, privateKey, {
     algorithm: "RS256",
     expiresIn: "7 days",
@@ -28,18 +36,12 @@ const createTokenPair = async (payload, publicKey, privateKey) => {
   return { accessToken, refreshToken };
 };
 
-const generateKeyPair = () => {
-  return crypto.generateKeyPairSync("rsa", {
-    modulusLength: 4096,
-    publicKeyEncoding: {
-      type: "pkcs1",
-      format: "pem",
-    },
-    privateKeyEncoding: {
-      type: "pkcs1",
-      format: "pem",
-    },
-  });
-}
+const getPrivateKey = () => {
+  return fs.readFileSync(privateKeyFilePath, "utf8");
+};
 
-export { createTokenPair, generateKeyPair };
+const getPublicKey = () => {
+  return fs.readFileSync(publicKeyFilePath, "utf8");
+};
+
+export { createTokenPair, getPrivateKey, getPublicKey };

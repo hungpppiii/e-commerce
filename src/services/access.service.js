@@ -5,7 +5,11 @@ import bcrypt from "bcrypt";
 import crypto from "crypto";
 import { Roles } from "../utils/constantType";
 import KeyTokenService from "./keyToken.service";
-import { createTokenPair, generateKeyPair } from "../auth/authUtils";
+import {
+  createTokenPair,
+  getPrivateKey,
+  getPublicKey,
+} from "../auth/authUtils";
 import { getInfoData } from "../utils";
 import { AuthFailureError, BadRequestError } from "../core/error.response";
 import ShopService from "./shop.service";
@@ -22,21 +26,20 @@ class AccessService {
 
     if (!match) throw new AuthFailureError("Authentication error!");
 
-    const { privateKey, publicKey } = generateKeyPair(existShop._id);
+    const privateKey = getPrivateKey();
+    const publicKey = getPublicKey();
 
-    const { publicKeyString, privateKeyString } =
-      await KeyTokenService.upsertKeyToken({
-        userId: existShop._id,
-        publicKey,
-        privateKey,
-      });
+    const { publicKeyString } = await KeyTokenService.upsertKeyToken({
+      userId: existShop._id,
+      publicKey,
+    });
 
     if (!publicKeyString) {
       throw new ConflictRequestError("PublicKeyString error!");
     }
 
     const publicKeyObject = crypto.createPublicKey(publicKeyString);
-    const privateKeyObject = crypto.createPrivateKey(privateKeyString);
+    const privateKeyObject = crypto.createPrivateKey(privateKey);
 
     const tokens = await createTokenPair(
       { userId: existShop._id, email },
@@ -70,21 +73,20 @@ class AccessService {
     });
 
     if (newShop) {
-      const { privateKey, publicKey } = generateKeyPair(newShop._id);
+      const privateKey = getPrivateKey();
+      const publicKey = getPublicKey();
 
-      const { publicKeyString, privateKeyString } =
-        await KeyTokenService.upsertKeyToken({
-          userId: newShop._id,
-          publicKey,
-          privateKey,
-        });
+      const { publicKeyString } = await KeyTokenService.upsertKeyToken({
+        userId: newShop._id,
+        publicKey,
+      });
 
       if (!publicKeyString) {
         throw new ConflictRequestError("PublicKeyString error!");
       }
 
       const publicKeyObject = crypto.createPublicKey(publicKeyString);
-      const privateKeyObject = crypto.createPrivateKey(privateKeyString);
+      const privateKeyObject = crypto.createPrivateKey(privateKey);
 
       const tokens = await createTokenPair(
         { userId: newShop._id, email },

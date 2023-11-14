@@ -7,7 +7,6 @@ import AccessService from "../services/access.service";
 class AccessController {
   // [POST] shop/signup {email, password}
   signIn = asyncHandler(async (req, res) => {
-    console.log("test", req.body);
     new OK({
       message: "Login successfully!",
       metadata: await AccessService.signIn(req.body),
@@ -26,7 +25,7 @@ class AccessController {
   logout = asyncHandler(async (req, res) => {
     new OK({
       message: "Logout successfully!",
-      metadata: await AccessService.logout(req.keyStore)
+      metadata: await AccessService.logout(req.keyStore),
     }).send(res);
   });
 }
